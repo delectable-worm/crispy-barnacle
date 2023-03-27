@@ -22,15 +22,15 @@ def dijkstra(g, start): #sorting attribute weight
             pq.put((distance[node],node))
 
         current = pq.get()
-        print(current[1])
+        cNodeName=current[1]
+        cDist = current[0]
+        unvisited.remove(cNodeName)
 
-        unvisited.remove(current)
-
-        for neighbour in nx.neighbors(current):
-            thisDist = distance[current] + g[current][neighbour]["weight"] #dict of dict model
+        for neighbour in g.neighbors(cNodeName):
+            thisDist = distance[current[1]] + g[current[1]][neighbour]["weight"] #dict of dict model
             if thisDist < distance[neighbour]:
                 distance[neighbour] = thisDist
-                predecessor[neighbour] = current
+                predecessor[neighbour] = current[1]
     
 
 G=nx.Graph() 
