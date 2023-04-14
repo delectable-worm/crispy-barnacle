@@ -1,48 +1,34 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-
+import math
 #prim
-def prim(g, start):
+
+
+def prim2(g):
+    minWeight = math.inf
     g = nx.Graph(g)
-    bestEdges = []
-    visibleEdges = []
-    visibleNodes = {start}
+    cost = 0
+    edges = []
+    mstNodes = [list(g)[0]]
+    print(mstNodes)
+    print(list(g))
+    while len(mstNodes) != len(list(g)):
+        for u in mstNodes:
+            for v in g.neighbors(u):
+                if not v in mstNodes:
+                    if minWeight > g[u][v]["weight"]:
+                        minWeight = g[u][v]["weight"]
+                        x = u
+                        y = v
+        mstNodes.append(y)
+        print(mstNodes)
+        edges.append((x,y,minWeight))
+        cost += minWeight
+        minWeight = math.inf
+    return cost
+            
+
     
-    #check that there are unvisisted nodes
-    while not(len(visibleNodes) == len(g.nodes())): 
-
-        #look for all edges
-        for node in visibleNodes:
-            for e in list(g.edges(node, data=True)):
-                visibleEdges.append(e)
-
-
-        #look for minimum edge where min doesn't cycle
-        do = True
-        while do:
-            edgeBuffer = []
-            for item in visibleEdges:
-                edgeBuffer.append(item[2]["weight"])
-
-            minimumE = min(edgeBuffer) #this is the minimum weight
-
-            #edgeBuffer is used to sort visible edges by weight
-
-            indexofMin = edgeBuffer.index(minimumE)
-            edgeWithIndex = visibleEdges[indexofMin]
-
-            if (edgeWithIndex[1] in visibleNodes) != (edgeWithIndex[0] in visibleNodes):
-                
-                bestEdges.append(edgeWithIndex)
-                visibleNodes.add(edgeWithIndex[1])
-                visibleNodes.add(edgeWithIndex[0])
-                do = False
-            else:
-                visibleEdges.remove(edgeWithIndex)
-        
-    return(bestEdges)
-                
-    return None
 
 # Python3/Trinket 3.6 Breakout Activity Graph 
 import matplotlib.pyplot as plt 
@@ -77,6 +63,6 @@ for u,v,d in G.edges(data=True)])
 nx.draw_networkx_edge_labels(G, pos,edge_labels=edge_labels) 
  
 plt.axis('off') 
-plt.show()
 
-print(prim(G, 4))
+
+print(prim2(G))

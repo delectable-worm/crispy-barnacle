@@ -18,20 +18,22 @@ def dijkstra(g, start): #sorting attribute weight
     distance[start]=0
 
     while len(unvisited) != 0:
+        pq.queue.clear()
         for node in distance:
-            pq.put((distance[node],node))
+            if node in unvisited:
+                pq.put((distance[node],node))
 
         current = pq.get()
         cNodeName=current[1]
         cDist = current[0]
         unvisited.remove(cNodeName)
-
+    
         for neighbour in g.neighbors(cNodeName):
             thisDist = distance[current[1]] + g[current[1]][neighbour]["weight"] #dict of dict model
             if thisDist < distance[neighbour]:
                 distance[neighbour] = thisDist
                 predecessor[neighbour] = current[1]
-    
+    return predecessor, distance
 
 G=nx.Graph() 
 # weighted edges for 3.6 activity 
@@ -63,4 +65,4 @@ for u,v,d in G.edges(data=True)])
 nx.draw_networkx_edge_labels(G, pos,edge_labels=edge_labels) 
  
 plt.axis('off')
-dijkstra(G, 4)
+print(dijkstra(G, 4))
