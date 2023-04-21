@@ -1,42 +1,31 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+from queue import PriorityQueue
 import math
-#prim
 
+def bf(g, start): #nicer, neater
+    predecessor = {}
+    distance = {}
+    getWeight = nx.get_edge_attributes(g,"weight")
+    g = nx.DiGraph(g)
 
-def prim2(g):
+    for node in g.nodes():
+        distance[node] = math.inf
+    distance[start]=0
 
-    minWeight = math.inf
-    g = nx.Graph(g)
-    cost = 0
-    edges = []
-    mstNodes = [list(g)[0]]
+    for i in range(g.number_of_nodes()-1):
+        for (u,v,d) in g.edges.data("weight"):
+            if distance[u] + d < distance[v]:
+                distance[v]=distance[u]+d
+                predecessor[v]=u
 
-    print(mstNodes)
-    print(list(g))
+    for (u,v,d) in g.edges.data("weight"):
+            if distance[u] + d < distance[v]:
+                return 1
     
-    while len(mstNodes) != len(list(g)): #not every node in mst
-        for u in mstNodes:
-            for v in g.neighbors(u): #every "seen" node
-                if not v in mstNodes: #v otuside but u inside
-                    if minWeight > g[u][v]["weight"]:
-                        minWeight = g[u][v]["weight"]
-                        x = u
-                        y = v
-        mstNodes.append(y)
-        print(mstNodes)
-        edges.append((x,y,minWeight))
-        cost += minWeight
-        minWeight = math.inf
+    return predecessor,distance
 
-    return cost, edges
-            
 
-    
-
-# Python3/Trinket 3.6 Breakout Activity Graph 
-import matplotlib.pyplot as plt 
-import networkx as nx 
 G=nx.Graph() 
 # weighted edges for 3.6 activity 
 G.add_edge(4,5,weight=3.5) 
@@ -66,7 +55,5 @@ edge_labels=dict([((u,v),d['weight'])
 for u,v,d in G.edges(data=True)]) 
 nx.draw_networkx_edge_labels(G, pos,edge_labels=edge_labels) 
  
-plt.axis('off') 
-
-
-print(prim2(G))
+plt.axis('off')
+print(bf(G, 4))

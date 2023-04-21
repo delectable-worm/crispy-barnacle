@@ -18,7 +18,9 @@ def bestFirstSearch(g, start, end):
         for neighbour in g[current]:
             if neighbour not in visited:
                 predecessor[neighbour]=current
+
                 nodeweight = g.nodes[neighbour]["weight"] #heuristic here
+                
                 toVisit.put((nodeweight,neighbour))
                 if neighbour==end:
                     print("found")

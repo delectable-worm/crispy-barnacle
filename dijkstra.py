@@ -6,14 +6,13 @@ import math
 
 def dijkstra(g, start): #sorting attribute weight
     g=nx.Graph(g)
+
     predecessor = {}
     distance = {}
-
     pq = PriorityQueue()
-
     unvisited = list(g.nodes)
 
-    for item in unvisited:
+    for item in unvisited: #step 1 init
         distance[item] = math.inf
     distance[start]=0
 
@@ -34,6 +33,37 @@ def dijkstra(g, start): #sorting attribute weight
                 distance[neighbour] = thisDist
                 predecessor[neighbour] = current[1]
     return predecessor, distance
+
+
+
+def dijkstra2(g,start): #nicer, neater
+    predecessor = {}
+    distance = {}
+    getWeight = nx.get_edge_attributes(g,"weight")
+    g = nx.DiGraph(g)
+    toVisit = PriorityQueue()
+    visited = []
+
+    for item in list(g.nodes()):
+        distance[item]=math.inf
+    distance[start]=0
+    toVisit.put((0,start))
+
+    while not toVisit.empty():
+        current = toVisit.get()[1]
+        visited.append(current)
+        for (u,v) in g.out_edges(current):
+            if v not in visited:
+                print(current, v)
+                tentative = distance[current]+getWeight[(current,v)]
+                if distance[v] > tentative:
+                    distance[v]=tentative
+                    predecessor[v]=current
+                    toVisit.put((tentative,v))
+    
+    return distance
+
+
 
 G=nx.Graph() 
 # weighted edges for 3.6 activity 
@@ -65,4 +95,4 @@ for u,v,d in G.edges(data=True)])
 nx.draw_networkx_edge_labels(G, pos,edge_labels=edge_labels) 
  
 plt.axis('off')
-print(dijkstra(G, 4))
+print(dijkstra2(G, 4))
